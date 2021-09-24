@@ -1,0 +1,19 @@
+.body {
+    background-color: #eee3d5;
+}
+
+.header {
+    background-color: #819462;
+    font-size: larger;
+}
+
+.form-inline{
+    width: 200%;
+    display: flex;
+    justify-content: center;
+    padding-left: 7rem;
+  }
+
+.form-inline #search{
+    width: 50%;
+}
