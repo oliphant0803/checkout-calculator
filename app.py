@@ -6,7 +6,8 @@ import json
 
 app = Flask(__name__)
 
-items = []
+items = {}
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -18,7 +19,15 @@ def cart():
 @app.route("/sum", methods=['POST'])
 def sum_num():
     rf=request.form
-    for key in rf.keys():
-        data = key
-    num_item = int(data) + 1
-    return str(num_item)
+    data = []
+    for key in rf:
+        data.append(rf[key])
+    print(data)
+    item_id = data[0]
+    if item_id in items:
+        items[item_id] += 1
+    else:
+        items[item_id] = 1
+    number = items.values()
+    print(items)
+    return str(number)

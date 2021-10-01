@@ -47,17 +47,26 @@ function item_display(id, name, img_src, price){
 
 function get_cart_num(){
 } $(function(){
-    $("#1").click(function() {
-        console.log(number);
+    $(".bg-cart").click(function() {
+        console.log(this.id);
+        id = parseInt(this.id) - 1;
+        postData = {
+            item_id: id+1,
+            name: name_info[id], 
+            price: price_info[id], 
+            img_src:  img_info[id]
+        };
+        console.log(postData);
         $.ajax({
             type: "POST",
             url: server+"/sum",
-            data:JSON.stringify(number),
+            data: postData,
             dataType: 'json'
         }).done(function(data) {
+            alert(data);
             console.log(data);
             number = data;
-            $('#numItem').html(data);
+            $('#numItem').html(number);
         });
     });
 });
