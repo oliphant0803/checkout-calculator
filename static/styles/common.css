@@ -1,0 +1,64 @@
+
+.header {
+    background-color: #819462;
+    font-size: larger;
+}
+
+.form-inline{
+    width: 100%;
+    display: flex;
+  }
+
+.form-inline #search{
+    width: 50%;
+}
+
+.font-header {
+    font-family: 'Licida Handwritting', cursive;
+}
+
+.modal-header {
+    background-color: #819462;
+    font-size: larger;
+    color: #F3EEE8;
+}
+
+.btn-success {
+    background-color: #819462;
+}
+
+.form-group i {
+    margin-left: -4rem;
+    cursor: pointer;
+}
+
+.form-group .inline {
+    padding-top: 0.4rem;
+}
+
+footer, footer a{
+    background-color: #819462;
+    color: #F3EEE8;
+}
+
+@media (min-width: 990px) {
+    .form-inline{
+        width: 200%;
+        display: flex;
+        justify-content: center;
+        padding-left: 4rem;
+        }
+}
+
+@media (min-width: 576px) {
+    .modal-footer .btn{
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 330px) {
+    .bg-cart {
+        font-size: xx-small;
+    }
+}

@@ -1,0 +1,20 @@
+section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+}
+
+.item-list .bg-cart{
+    background-color: #819462;
+    color: #F3EEE8;
+    margin-top: 1rem;
+}
+
+.item-list .card {
+    background-color: #DFDAD3;
+    margin: auto;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 1rem;
+    border: transparent
+}
