@@ -33,7 +33,7 @@ function update() {
         var id = i+1;
         item_display(id, name_info[i], img_info[i], price_info[i]);
     }
-    get_cart_num(server, number);
+    get_cart_num();
 }
 
 function item_display(id, name, img_src, price){
@@ -63,7 +63,6 @@ function get_cart_num(){
             data: postData,
             dataType: 'json'
         }).done(function(data) {
-            alert(data);
             console.log(data);
             number = data;
             $('#numItem').html(number);

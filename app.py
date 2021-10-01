@@ -28,6 +28,6 @@ def sum_num():
         items[item_id] += 1
     else:
         items[item_id] = 1
-    number = items.values()
+    number = sum(items.values())
     print(items)
-    return str(number)
+    return jsonify(number)
