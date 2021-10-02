@@ -20,15 +20,6 @@ var price_info = [
 ];
 function update() {
 
-    const togglePassword = document.querySelector('#togglePassword');
-    const password = document.querySelector('#password');
-
-    togglePassword.addEventListener('click', function (e) {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('bi-eye');
-    });
-
     for(var i = 0; i<18; i++){
         var id = i+1;
         item_display(id, name_info[i], img_info[i], price_info[i]);
@@ -85,3 +76,17 @@ function update_cart_num(){
         $('#numItem').html(number);
     });
 });
+
+function search_item() {
+    let input = document.getElementById('searchbar').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('card');
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].parentElement.style.display = "none";
+        }
+        else {   
+            x[i].parentElement.style.display = "block";            
+        }
+    }
+}

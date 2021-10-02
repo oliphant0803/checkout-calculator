@@ -1,3 +1,4 @@
+var server = "http://127.0.0.1:5000";
 var name_info = [
     "item 1", "item 2", "item 3", "item 4", "item 5", "item 6",
     "item 7", "item 8", "item 9", "item 10", "item 11", "item 12",
@@ -15,35 +16,92 @@ var price_info = [
     1, 2, 3, 4, 5, 6, 7, 8, 9,
     10, 11, 12, 13, 14, 15, 16, 17, 18
 ];
+
+var discount_code = [
+    "OLIBAKA01", "OLIBAKA02", "OLIBAKA03",
+    "OLIBAKA04", "OLIBAKA05", "OLIBAKA06"
+];
+
+var discount_amount = [
+    0.8, 0.9, 0.9, 0.5, 0.8, 0.7
+];
+
+var shipping_option = [
+    "Same-Day $15.00",
+    "Fast $10.00",
+    "Standard $5.00"
+];
+
+var shipping_amount = [
+    15, 10, 5
+];
+
+
+var ids = [];
 var prices = [];
 var itemNum = [];
 var imgs = [];
 var itemnames = [];
+var discount = 1;
+var shipping = 0;
 
 function cartUpdate() {
 
-    const togglePassword = document.querySelector('#togglePassword');
-    const password = document.querySelector('#password');
-
-    togglePassword.addEventListener('click', function (e) {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('bi-eye');
-    });
-
+    get_ids();
     get_prices();
     get_item_counts();
     get_item_imgs();
     get_item_names();
 
     for (var i = 0; i<prices.length; i++){
-        listenCartUpdate(imgs[i], itemnames[i], itemsNum[i], prices[i]);
+        listenCartUpdate(ids[i], imgs[i], itemnames[i], itemNum[i], prices[i]);
     }
 
     get_num_item();
-
-    calculatePrice(prices, itemsNum);
+    updateSummary();
 }
+
+function updateSummary(){
+    get_shipping();
+    calculate_discount();
+    console.log(discount);
+    calculatePrice();
+}
+
+function calculate_discount(){
+    let input = document.getElementById('code').value;
+    input=input.toUpperCase();
+    console.log(input);
+    for (var i = 0; i< discount_code.length; i++){
+        if (discount_code[i] == input){
+            discount = discount_amount[i];
+        }
+    }
+}
+
+function get_shipping(){
+    let input = document.getElementById('shipping').value;
+    console.log(input);
+    for (var i = 0; i< shipping_option.length; i++){
+        if (shipping_option[i] == input){
+            shipping = shipping_amount[i];
+        }
+    }
+}
+
+function get_ids(){
+} $(function(){
+    postData = {};
+    $.ajax({
+        type: "POST",
+        url: server+"/getids",
+        data: postData,
+        datatype: 'json'
+    }).done(function(data){
+        console.log(data);
+        ids = data;
+    });
+});
 
 function get_prices(){
 } $(function(){
@@ -101,7 +159,7 @@ function get_item_names(){
     });
 });
 
-function listenCartUpdate(image, name, numItem, price) {
+function listenCartUpdate(id, image, name, numItem, price) {
     var newRow = document.createElement("div");
     newRow.setAttribute("class", "row border-top border-bottom");
     var mainRow = document.createElement("div");
@@ -126,12 +184,16 @@ function listenCartUpdate(image, name, numItem, price) {
     var deleteKey = document.createElement("i");
     deleteKey.setAttribute("class", "icon fas fa-minus delete");
     deleteDiv.appendChild(deleteKey);
+    deleteDiv.setAttribute("id", id);
+    deleteDiv.onclick = function(){listenDelete(id)};
     var numDiv = document.createElement("a");
     numDiv.innerHTML = numItem;
     var addDiv = document.createElement("a");
     var addKey = document.createElement("i");
     addKey.setAttribute("class", "icon fas fa-plus add");
     addDiv.appendChild(addKey);
+    addDiv.setAttribute("id", id);
+    addDiv.onclick = function(){listenAdd(id)};
     col4Div.appendChild(deleteDiv);
     col4Div.appendChild(numDiv);
     col4Div.appendChild(addDiv);
@@ -141,14 +203,12 @@ function listenCartUpdate(image, name, numItem, price) {
     col5Div.innerHTML = "$" + price;
     var removeKey = document.createElement("i");
     removeKey.setAttribute("class", "far fa-trash-alt remove");
+    removeKey.setAttribute("id", id)
+    removeKey.onclick = function(){listenDeleteAll(id)};
     col5Div.appendChild(removeKey);
     mainRow.appendChild(col5Div);
     newRow.appendChild(mainRow);
     document.getElementById("cart-items").appendChild(newRow);
-}
-
-function summaryUpdate(){
-
 }
 
 function get_num_item(){
@@ -168,12 +228,48 @@ function get_num_item(){
     });
 });
 
-function calculatePrice(prices, itemsNum){
-    var totalPrice = 0;
+function calculatePrice(){
+    var totalPrice = 0.00;
     for (var i=0; i<prices.length; i++){
-        totalPrice += prices[i] * itemsNum[i]; 
+        totalPrice += prices[i]; 
     }
-    document.getElementById("beforeTaxPrice").innerHTML = totalPrice;
+    if (totalPrice != 0){
+        totalPrice = parseFloat(totalPrice + shipping) * parseFloat(discount);
+    }
+    document.getElementById("beforeTaxPrice").innerHTML = Math.round(totalPrice * 100) / 100;;
     document.getElementById("tax").innerHTML = Math.round(totalPrice * 0.13 * 100) / 100;
     document.getElementById("total").innerHTML = Math.round(totalPrice * 1.13 * 100) / 100;
+}
+
+function listenAdd(id){
+    var curr_id = parseInt(id);
+    console.log(curr_id);
+    $.ajax({
+        type: "POST",
+        url: server+"/addincart",
+        data: "id=" + curr_id
+    });
+    location.reload();
+} 
+
+function listenDelete(id){
+    var curr_id = parseInt(id);
+    console.log(curr_id);
+    $.ajax({
+        type: "POST",
+        url: server+"/deleteincart",
+        data: "id=" + curr_id
+    });
+    location.reload();
+}
+
+function listenDeleteAll(id){
+    var curr_id = parseInt(id);
+    console.log(curr_id);
+    $.ajax({
+        type: "POST",
+        url: server+"/removeincart",
+        data: "id=" + curr_id
+    });
+    location.reload();
 }
