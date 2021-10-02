@@ -102,7 +102,7 @@ def get_names():
 def get_prices():
     prices = []
     for item_id in info:
-        prices.append(int(info[item_id][1]) * int(items[item_id]))
+        prices.append(float(info[item_id][1]) * float(items[item_id]))
     return jsonify(prices)
 
 @app.route("/getcounts", methods=['POST'])

@@ -1,20 +1,20 @@
 var server = "http://127.0.0.1:5000";
 var name_info = [
-    "item 1", "item 2", "item 3", "item 4", "item 5", "item 6",
-    "item 7", "item 8", "item 9", "item 10", "item 11", "item 12",
-    "item 13", "item 14", "item 15", "item 16", "item 17", "item 18"
+    "LED bulb 806", "LED bulb 800", "LED bulb 600", "LED bulb 450", "LED bulb 380", "LED bulb 400",
+    "LED spotlight", "LED abinet", "Remote Control", "Gateway", "Wireless Dimmer", "Control Outlet",
+    "Motion Sensor", "Signal Repeater", "Dimmer kit", "Remote Control Kit", "Control Outlet Kit", "Gateway Kit E12"
 ];
 var img_info = [
-    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png", 
-    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png",
-    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png", 
-    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png",
-    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png", 
-    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png"
+    "/static/assets/1.png", "/static/assets/2.png", "/static/assets/3.png", 
+    "/static/assets/4.png", "/static/assets/5.png", "/static/assets/6.png", 
+    "/static/assets/7.png", "/static/assets/8.png", "/static/assets/9.png", 
+    "/static/assets/10.png", "/static/assets/11.png", "/static/assets/12.png", 
+    "/static/assets/13.png", "/static/assets/14.png", "/static/assets/15.png", 
+    "/static/assets/16.png", "/static/assets/17.png", "/static/assets/18.png"
 ];
 var price_info = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9,
-    10, 11, 12, 13, 14, 15, 16, 17, 18
+    11.99, 19.99, 14.99, 17.99, 16.99, 14.99, 7.99, 25.00, 17.99,
+    29.99, 7.99, 14.99, 14.99, 14.99, 9.99, 29.99, 19.99, 99.00
 ];
 
 var discount_code = [
