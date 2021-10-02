@@ -1,0 +1,19 @@
+number,name,price,path
+1,LED bulb E26 806 lumen,11.99,static/assets/1.png
+2,LED bulb E26 800 lumen,19.99,static/assets/2.png
+3,LED bulb E12 600 lumen,14.99,static/assets/3.png
+4,LED bulb E12 450 lumen,17.99,static/assets/4.png
+5,LED bulb GU10 380 lumen,16.99,static/assets/5.png
+6,LED bulb GU10 400 lumen,14.99,static/assets/6.png
+7,LED spotlight,7.99,static/assets/7.png
+8,LED abinet light,25.00,static/assets/8.png
+9,Remote Control,17.99,static/assets/9.png
+10,Gateway,29.99,static/assets/10.png
+11,Wireless dimmer,7.99,static/assets/11.png
+12,Wireless control outlet,14.99,static/assets/12.png
+13,Wireless motion sensor,14.99,static/assets/13.png
+14,Signal repeater,9.99,static/assets/14.png
+15,Dimmer kit E26,14.99,static/assets/15.png
+16,Remote control kit E26,29.99,static/assets/16.png
+17,Control outlet kit,19.99,static/assets/17.png
+18,Gateway kit E12,99.00,static/assets/18.png
