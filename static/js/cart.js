@@ -1,3 +1,25 @@
+var name_info = [
+    "item 1", "item 2", "item 3", "item 4", "item 5", "item 6",
+    "item 7", "item 8", "item 9", "item 10", "item 11", "item 12",
+    "item 13", "item 14", "item 15", "item 16", "item 17", "item 18"
+];
+var img_info = [
+    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png", 
+    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png",
+    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png", 
+    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png",
+    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png", 
+    "/static/assets/placeholder.png", "/static/assets/placeholder.png", "/static/assets/placeholder.png"
+];
+var price_info = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9,
+    10, 11, 12, 13, 14, 15, 16, 17, 18
+];
+var prices = [];
+var itemNum = [];
+var imgs = [];
+var itemnames = [];
+
 function cartUpdate() {
 
     const togglePassword = document.querySelector('#togglePassword');
@@ -8,19 +30,76 @@ function cartUpdate() {
         password.setAttribute('type', type);
         this.classList.toggle('bi-eye');
     });
-    document.getElementById("numItem").innerHTML = number;
-    document.getElementById("numItemCart").innerHTML = number;
-    document.getElementById("numItemSummary").innerHTML = number;
 
-    var prices = [1, 1, 1];
-    var itemsNum = [1, 1, 1];
+    get_prices();
+    get_item_counts();
+    get_item_imgs();
+    get_item_names();
 
-    listenCartUpdate("/static/assets/placeholder.png", "Item 1", itemsNum[0], prices[0]);
-    listenCartUpdate("/static/assets/placeholder.png", "Item 2", itemsNum[1], prices[1]);
-    listenCartUpdate("/static/assets/placeholder.png", "Item 3", itemsNum[2], prices[2]);
+    for (var i = 0; i<prices.length; i++){
+        listenCartUpdate(imgs[i], itemnames[i], itemsNum[i], prices[i]);
+    }
+
+    get_num_item();
 
     calculatePrice(prices, itemsNum);
 }
+
+function get_prices(){
+} $(function(){
+    postData = {};
+    $.ajax({
+        type: "POST",
+        url: server+"/getprices",
+        data: postData,
+        datatype: 'json'
+    }).done(function(data){
+        console.log(data);
+        prices = data;
+    });
+});
+
+function get_item_counts(){
+} $(function(){
+    postData = {};
+    $.ajax({
+        type: "POST",
+        url: server+"/getcounts",
+        data: postData,
+        datatype: 'json'
+    }).done(function(data){
+        console.log(data);
+        itemNum = data;
+    });
+});
+
+function get_item_imgs(){
+} $(function(){
+    postData = {};
+    $.ajax({
+        type: "POST",
+        url: server+"/getimgs",
+        data: postData,
+        datatype: 'json'
+    }).done(function(data){
+        console.log(data);
+        imgs = data;
+    });
+});
+
+function get_item_names(){
+} $(function(){
+    postData = {};
+    $.ajax({
+        type: "POST",
+        url: server+"/getnames",
+        data: postData,
+        datatype: 'json'
+    }).done(function(data){
+        console.log(data);
+        itemnames = data;
+    });
+});
 
 function listenCartUpdate(image, name, numItem, price) {
     var newRow = document.createElement("div");
@@ -71,6 +150,23 @@ function listenCartUpdate(image, name, numItem, price) {
 function summaryUpdate(){
 
 }
+
+function get_num_item(){
+} $(function(){
+    postData = {};
+    $.ajax({
+        type: "POST",
+        url: server+"/cartnum",
+        data: postData,
+        datatype: 'json'
+    }).done(function(data){
+        console.log(data);
+        number = data;
+        document.getElementById("numItem").innerHTML = number;
+        document.getElementById("numItemCart").innerHTML = number;
+        document.getElementById("numItemSummary").innerHTML = number;
+    });
+});
 
 function calculatePrice(prices, itemsNum){
     var totalPrice = 0;

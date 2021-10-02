@@ -1,5 +1,6 @@
 var server = "http://127.0.0.1:5000";
-var number = 0;
+var number;
+
 var name_info = [
     "item 1", "item 2", "item 3", "item 4", "item 5", "item 6",
     "item 7", "item 8", "item 9", "item 10", "item 11", "item 12",
@@ -17,7 +18,6 @@ var price_info = [
     1, 2, 3, 4, 5, 6, 7, 8, 9,
     10, 11, 12, 13, 14, 15, 16, 17, 18
 ];
-$('#numItem').html(number);
 function update() {
 
     const togglePassword = document.querySelector('#togglePassword');
@@ -46,6 +46,7 @@ function item_display(id, name, img_src, price){
 }
 
 function get_cart_num(){
+    number = update_cart_num();
 } $(function(){
     $(".bg-cart").click(function() {
         console.log(this.id);
@@ -71,5 +72,16 @@ function get_cart_num(){
 });
 
 function update_cart_num(){
-
-}
+} $(function(){
+    postData = {};
+    $.ajax({
+        type: "POST",
+        url: server+"/cartnum",
+        data: postData,
+        datatype: 'json'
+    }).done(function(data){
+        console.log(data);
+        number = data;
+        $('#numItem').html(number);
+    });
+});
