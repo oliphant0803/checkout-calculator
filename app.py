@@ -1,6 +1,7 @@
 from os import name
-from flask import Flask, redirect, url_for, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify
 import json
+
 
 app = Flask(__name__)
 
@@ -111,3 +112,6 @@ def get_counts():
     for item_id in items:
         counts.append(items[item_id])
     return jsonify(counts)
+
+if __name__ == "__main__":
+    app.run(debug=True)
