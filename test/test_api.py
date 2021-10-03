@@ -1,6 +1,8 @@
 from copy import deepcopy
 import unittest
 from flask import jsonify
+import sys
+sys.path.append('../')
 from app import app
 
 BASE_URL = 'http://127.0.0.1:5000/'
