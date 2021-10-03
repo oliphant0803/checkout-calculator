@@ -86,7 +86,7 @@ function search_item() {
             x[i].parentElement.style.display = "none";
         }
         else {   
-            x[i].parentElement.style.display = "block";            
+            x[i].parentElement.style.display = "flex";            
         }
     }
 }
