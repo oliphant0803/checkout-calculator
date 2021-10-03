@@ -35,39 +35,51 @@ var shipping_amount = [
     15, 10, 5
 ];
 
+window.onload = cartUpdate();
 
-var ids = [];
-var prices = [];
-var itemNum = [];
-var imgs = [];
-var itemnames = [];
-var discount = 1;
-var shipping = 0;
+
+$('#code').on('change', function() {
+    let prices = get_prices();
+    var discount = 1;
+    var shipping = 0;
+    updateSummary(prices, discount, shipping);
+});
+
+$('#shipping').on('change', function() {
+    let prices = get_prices();
+    var discount = 1;
+    var shipping = 0;
+    updateSummary(prices, discount, shipping);
+});
 
 function cartUpdate() {
 
-    get_ids();
-    get_prices();
-    get_item_counts();
-    get_item_imgs();
-    get_item_names();
+    let ids = get_ids();
+    let prices = get_prices();
+    let itemNum = get_item_counts();
+    let imgs = get_item_imgs();
+    let itemnames = get_item_names();
 
+    var discount = 1;
+    var shipping = 0;
+
+    console.log(ids, prices, itemNum, imgs, itemnames, discount, shipping);
     for (var i = 0; i<prices.length; i++){
         listenCartUpdate(ids[i], imgs[i], itemnames[i], itemNum[i], prices[i]);
     }
 
     get_num_item();
-    updateSummary();
+    updateSummary(prices, discount, shipping);
 }
 
-function updateSummary(){
-    get_shipping();
-    calculate_discount();
+function updateSummary(prices, discount, shipping){
+    shipping = get_shipping(shipping);
+    discount = calculate_discount(discount);
     console.log(discount);
-    calculatePrice();
+    calculatePrice(prices, discount, shipping);
 }
 
-function calculate_discount(){
+function calculate_discount(discount){
     let input = document.getElementById('code').value;
     input=input.toUpperCase();
     console.log(input);
@@ -80,9 +92,10 @@ function calculate_discount(){
             }
         }
     }
+    return discount;
 }
 
-function get_shipping(){
+function get_shipping(shipping){
     let input = document.getElementById('shipping').value;
     console.log(input);
     for (var i = 0; i< shipping_option.length; i++){
@@ -90,77 +103,104 @@ function get_shipping(){
             shipping = shipping_amount[i];
         }
     }
+    return shipping
 }
 
-function get_ids(){
-} $(function(){
+function get_ids() {
+    result = [];
     postData = {};
     $.ajax({
         type: "POST",
         url: "/getids",
         data: postData,
-        datatype: 'json'
-    }).done(function(data){
-        console.log(data);
-        ids = data;
+        async: false,
+        datatype: 'json',
+        success: function(data) {
+            result = data;
+        },
+        error: function() {
+            alert('Error occured');
+        }
     });
-});
+    return result;
+}
 
-function get_prices(){
-} $(function(){
+function get_prices() {
+    result = [];
     postData = {};
     $.ajax({
         type: "POST",
         url: "/getprices",
         data: postData,
-        datatype: 'json'
-    }).done(function(data){
-        console.log(data);
-        prices = data;
+        async: false,
+        datatype: 'json',
+        success: function(data) {
+            result = data;
+        },
+        error: function() {
+            alert('Error occured');
+        }
     });
-});
+    return result;
+}
 
-function get_item_counts(){
-} $(function(){
+function get_item_counts() {
+    result = [];
     postData = {};
     $.ajax({
         type: "POST",
         url: "/getcounts",
         data: postData,
-        datatype: 'json'
-    }).done(function(data){
-        console.log(data);
-        itemNum = data;
+        async: false,
+        datatype: 'json',
+        success: function(data) {
+            result = data;
+        },
+        error: function() {
+            alert('Error occured');
+        }
     });
-});
+    return result;
+}
 
-function get_item_imgs(){
-} $(function(){
+function get_item_imgs() {
+    result = [];
     postData = {};
     $.ajax({
         type: "POST",
         url: "/getimgs",
         data: postData,
-        datatype: 'json'
-    }).done(function(data){
-        console.log(data);
-        imgs = data;
+        async: false,
+        datatype: 'json',
+        success: function(data) {
+            result = data;
+        },
+        error: function() {
+            alert('Error occured');
+        }
     });
-});
+    return result;
+}
 
-function get_item_names(){
-} $(function(){
+function get_item_names() {
+    result = [];
     postData = {};
     $.ajax({
         type: "POST",
         url: "/getnames",
         data: postData,
-        datatype: 'json'
-    }).done(function(data){
-        console.log(data);
-        itemnames = data;
+        async: false,
+        datatype: 'json',
+        success: function(data) {
+            result = data;
+        },
+        error: function() {
+            alert('Error occured');
+        }
     });
-});
+    return result;
+}
+
 
 function listenCartUpdate(id, image, name, numItem, price) {
     var newRow = document.createElement("div");
@@ -231,7 +271,7 @@ function get_num_item(){
     });
 });
 
-function calculatePrice(){
+function calculatePrice(prices, discount, shipping){
     var totalPrice = 0.00;
     for (var i=0; i<prices.length; i++){
         totalPrice += prices[i]; 
