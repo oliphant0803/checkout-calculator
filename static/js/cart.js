@@ -72,9 +72,13 @@ function calculate_discount(){
     let input = document.getElementById('code').value;
     input=input.toUpperCase();
     console.log(input);
-    for (var i = 0; i< discount_code.length; i++){
-        if (discount_code[i] == input){
-            discount = discount_amount[i];
+    if (input == ''){
+        discount = 1;
+    }else{
+        for (var i = 0; i< discount_code.length; i++){
+            if (discount_code[i] == input){
+                discount = discount_amount[i];
+            }
         }
     }
 }
