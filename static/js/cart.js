@@ -1,4 +1,3 @@
-var server = "http://127.0.0.1:5000";
 var name_info = [
     "LED bulb 806", "LED bulb 800", "LED bulb 600", "LED bulb 450", "LED bulb 380", "LED bulb 400",
     "LED spotlight", "LED abinet", "Remote Control", "Gateway", "Wireless Dimmer", "Control Outlet",
@@ -98,7 +97,7 @@ function get_ids(){
     postData = {};
     $.ajax({
         type: "POST",
-        url: server+"/getids",
+        url: "/getids",
         data: postData,
         datatype: 'json'
     }).done(function(data){
@@ -112,7 +111,7 @@ function get_prices(){
     postData = {};
     $.ajax({
         type: "POST",
-        url: server+"/getprices",
+        url: "/getprices",
         data: postData,
         datatype: 'json'
     }).done(function(data){
@@ -126,7 +125,7 @@ function get_item_counts(){
     postData = {};
     $.ajax({
         type: "POST",
-        url: server+"/getcounts",
+        url: "/getcounts",
         data: postData,
         datatype: 'json'
     }).done(function(data){
@@ -140,7 +139,7 @@ function get_item_imgs(){
     postData = {};
     $.ajax({
         type: "POST",
-        url: server+"/getimgs",
+        url: "/getimgs",
         data: postData,
         datatype: 'json'
     }).done(function(data){
@@ -154,7 +153,7 @@ function get_item_names(){
     postData = {};
     $.ajax({
         type: "POST",
-        url: server+"/getnames",
+        url: "/getnames",
         data: postData,
         datatype: 'json'
     }).done(function(data){
@@ -220,7 +219,7 @@ function get_num_item(){
     postData = {};
     $.ajax({
         type: "POST",
-        url: server+"/cartnum",
+        url: "/cartnum",
         data: postData,
         datatype: 'json'
     }).done(function(data){
@@ -250,7 +249,7 @@ function listenAdd(id){
     console.log(curr_id);
     $.ajax({
         type: "POST",
-        url: server+"/addincart",
+        url: "/addincart",
         data: "id=" + curr_id
     });
     location.reload();
@@ -261,7 +260,7 @@ function listenDelete(id){
     console.log(curr_id);
     $.ajax({
         type: "POST",
-        url: server+"/deleteincart",
+        url: "/deleteincart",
         data: "id=" + curr_id
     });
     location.reload();
@@ -272,7 +271,7 @@ function listenDeleteAll(id){
     console.log(curr_id);
     $.ajax({
         type: "POST",
-        url: server+"/removeincart",
+        url: "/removeincart",
         data: "id=" + curr_id
     });
     location.reload();

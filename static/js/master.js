@@ -1,4 +1,4 @@
-var server = "http://127.0.0.1:5000";
+var server = "0.0.0.0";
 var number;
 
 var name_info = [
@@ -51,7 +51,7 @@ function get_cart_num(){
         console.log(postData);
         $.ajax({
             type: "POST",
-            url: server+"/sum",
+            url: "/sum",
             data: postData,
             dataType: 'json'
         }).done(function(data) {
@@ -67,7 +67,7 @@ function update_cart_num(){
     postData = {};
     $.ajax({
         type: "POST",
-        url: server+"/cartnum",
+        url: "/cartnum",
         data: postData,
         datatype: 'json'
     }).done(function(data){
