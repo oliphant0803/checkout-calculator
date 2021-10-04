@@ -287,6 +287,7 @@ function calculatePrice(prices, discount, shipping){
     document.getElementById("ws").innerHTML = Math.round(totalPrice * 100) / 100;
     document.getElementById("tax").innerHTML = Math.round(totalPrice * 0.13 * 100) / 100;
     document.getElementById("total").innerHTML = Math.round(totalPrice * 1.13 * 100) / 100;
+    document.getElementById("totalprice").innerHTML = Math.round(totalPrice * 1.13 * 100) / 100;
 }
 
 function listenAdd(id){
