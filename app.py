@@ -1,6 +1,7 @@
 from os import name
 from flask import Flask, render_template, request, jsonify
 import sqlite3
+import cleandb
 
 app = Flask(__name__)
 
@@ -250,6 +251,21 @@ def get_counts():
     result = list(counts.values())
     print(result)
     return jsonify(result)
+
+@app.route("/cleandb")
+def reset():
+    cleandb.clean()
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    if infos is not None:
+        print(infos)
+    else:
+        return 0
+    
+    return jsonify(len(infos))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
