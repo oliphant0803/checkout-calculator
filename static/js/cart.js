@@ -246,11 +246,11 @@ function listenCartUpdate(id, image, name, numItem, price) {
     var col5Div = document.createElement("div");
     col5Div.setAttribute("class", "col value");
     col5Div.innerHTML = "$" + price;
-    var removeKey = document.createElement("i");
-    removeKey.setAttribute("class", "far fa-trash-alt remove");
-    removeKey.setAttribute("id", id)
-    removeKey.onclick = function(){listenDeleteAll(id)};
-    col5Div.appendChild(removeKey);
+    // var removeKey = document.createElement("i");
+    // removeKey.setAttribute("class", "far fa-trash-alt remove");
+    // removeKey.setAttribute("id", id)
+    // removeKey.onclick = function(){listenDeleteAll(id)};
+    // col5Div.appendChild(removeKey);
     mainRow.appendChild(col5Div);
     newRow.appendChild(mainRow);
     document.getElementById("cart-items").appendChild(newRow);
