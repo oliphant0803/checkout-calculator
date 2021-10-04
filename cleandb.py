@@ -3,7 +3,7 @@ import sqlite3
 def clean():
     conn = None
     try: 
-        conn = sqlite3.connect('iteminfo.sqlite')
+        conn = sqlite3.connect('iteminfo.db')
         cursor = conn.cursor()
 
         clean_query = """ DROP TABLE IF EXISTS info;"""

@@ -42,14 +42,16 @@ $('#code').on('change', function() {
     let prices = get_prices();
     var discount = 1;
     var shipping = 0;
-    updateSummary(prices, discount, shipping);
+    let itemNum = get_item_counts();
+    updateSummary(prices, discount, shipping, itemNum);
 });
 
 $('#shipping').on('change', function() {
     let prices = get_prices();
     var discount = 1;
     var shipping = 0;
-    updateSummary(prices, discount, shipping);
+    let itemNum = get_item_counts();
+    updateSummary(prices, discount, shipping, itemNum);
 });
 
 function cartUpdate() {
@@ -69,14 +71,14 @@ function cartUpdate() {
     }
 
     get_num_item();
-    updateSummary(prices, discount, shipping);
+    updateSummary(prices, discount, shipping, itemNum);
 }
 
-function updateSummary(prices, discount, shipping){
+function updateSummary(prices, discount, shipping, itemNum){
     shipping = get_shipping(shipping);
     discount = calculate_discount(discount);
     console.log(discount);
-    calculatePrice(prices, discount, shipping);
+    calculatePrice(prices, discount, shipping, itemNum);
 }
 
 function calculate_discount(discount){
@@ -271,7 +273,7 @@ function get_num_item(){
     });
 });
 
-function calculatePrice(prices, discount, shipping){
+function calculatePrice(prices, discount, shipping, itemNum){
     var totalPrice = 0.00;
     for (var i=0; i<prices.length; i++){
         totalPrice += parseFloat(prices[i]) * parseInt(itemNum[i]); 

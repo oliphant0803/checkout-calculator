@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 conn = None
 try: 
-    conn = sqlite3.connect('iteminfo.sqlite', check_same_thread=False)
+    conn = sqlite3.connect('iteminfo.db', check_same_thread=False)
     cursor = conn.cursor()
 
     clean_query = """ DROP TABLE IF EXISTS info;"""
@@ -26,13 +26,13 @@ try:
 except sqlite3.error as e:
         print(e)
 
-def db_connection():
-    conn = None
-    try: 
-        conn = sqlite3.connect('iteminfo.sqlite')
-    except sqlite3.error as e:
-        print(e)
-    return conn
+# def db_connection():
+#     conn = None
+#     try: 
+#         conn = sqlite3.connect('iteminfo.db')
+#     except sqlite3.error as e:
+#         print(e)
+#     return conn
 
 @app.route("/")
 def index():
@@ -77,7 +77,7 @@ def add():
         data.append(rf[key])
     item_id = data[0]
     cursor = conn.execute("SELECT * FROM info WHERE itemid=?", (item_id,))
-    infos =  cursor.fetchlast()
+    infos =  cursor.fetchone()
     sql = """INSERT INTO info (itemid, itemname, price, itemimg)
             VALUES (?, ?, ?, ?)"""
     cursor = conn.execute(sql, (infos[1], infos[2], infos[3], infos[4]))
