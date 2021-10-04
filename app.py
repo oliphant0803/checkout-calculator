@@ -157,16 +157,16 @@ def get_ids():
         dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
         for row in cursor.fetchall()
     ]
-    # if infos is not None:
-    #     print(infos)
-    # else:
-    #     return []
+    if infos is not None:
+        print(infos)
+    else:
+        return []
     counts = {}
     for info in infos:
         if info['itemid'] not in counts:
             counts[info['itemid']] = info['itemid']
     result = list(counts.values())
-    # print(result)
+    print(result)
     return jsonify(result)
 
 @app.route("/getimgs", methods=['POST'])
@@ -177,16 +177,16 @@ def get_imgs():
         dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
         for row in cursor.fetchall()
     ]
-    # if infos is not None:
-    #     print(infos)
-    # else:
-    #     return []
+    if infos is not None:
+        print(infos)
+    else:
+        return []
     counts = {}
     for info in infos:
         if info['itemid'] not in counts:
             counts[info['itemid']] = info['itemimg']
     result = list(counts.values())
-    # print(result)
+    print(result)
     return jsonify(result)
 
 @app.route("/getnames", methods=['POST'])
@@ -197,16 +197,16 @@ def get_names():
         dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
         for row in cursor.fetchall()
     ]
-    # if infos is not None:
-    #     print(infos)
-    # else:
-    #     return []
+    if infos is not None:
+        print(infos)
+    else:
+        return []
     counts = {}
     for info in infos:
         if info['itemid'] not in counts:
             counts[info['itemid']] = info['name']
     result = list(counts.values())
-    # print(result)
+    print(result)
     return jsonify(result)
 
 @app.route("/getprices", methods=['POST'])
@@ -217,16 +217,16 @@ def get_prices():
         dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
         for row in cursor.fetchall()
     ]
-    # if infos is not None:
-    #     print(infos)
-    # else:
-    #     return []
+    if infos is not None:
+        print(infos)
+    else:
+        return []
     counts = {}
     for info in infos:
         if info['itemid'] not in counts:
             counts[info['itemid']] = info['price']
     result = list(counts.values())
-    # print(result)
+    print(result)
     return jsonify(result)
 
 @app.route("/getcounts", methods=['POST'])
@@ -237,10 +237,10 @@ def get_counts():
         dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
         for row in cursor.fetchall()
     ]
-    # if infos is not None:
-    #     print(infos)
-    # else:
-    #     return []
+    if infos is not None:
+        print(infos)
+    else:
+        return []
     counts = {}
     for info in infos:
         if info['itemid'] not in counts:
@@ -248,7 +248,7 @@ def get_counts():
         else:
             counts[info['itemid']] += 1
     result = list(counts.values())
-    # print(result)
+    print(result)
     return jsonify(result)
 
 if __name__ == "__main__":
