@@ -1,12 +1,34 @@
 from os import name
 from flask import Flask, render_template, request, jsonify
-import json
-
+import sqlite3
 
 app = Flask(__name__)
 
-items = {}
-info = {}
+conn = sqlite3.connect("iteminfo.sqlite")
+
+cursor = conn.cursor()
+
+clean_query = """ DROP TABLE IF EXISTS info;"""
+
+cursor.execute(clean_query)
+
+sql_query = """ CREATE TABLE IF NOT EXISTS info (
+    id INTEGER PRIMARY KEY,
+    itemid text NOT NULL,
+    itemname text NOT NULL,
+    price text NOT NULL,
+    itemimg text NOT NULL
+)"""
+
+cursor.execute(sql_query)
+
+def db_connection():
+    conn = None
+    try: 
+        conn = sqlite3.connect('iteminfo.sqlite')
+    except sqlite3.error as e:
+        print(e)
+    return conn
 
 @app.route("/")
 def index():
@@ -23,17 +45,36 @@ def sum_num():
     for key in rf:
         data.append(rf[key])
     print(data)
-    item_id = data[0]
-    if item_id not in info:
-        info[item_id] = (data[1], data[2], data[3])
-    if item_id in items:
-        items[item_id] += 1
-    else:
-        items[item_id] = 1
-    number = sum(items.values())
-    print(items)
-    print(info)
-    return jsonify(number)
+    # item_id = data[0]
+    # if item_id not in info:
+    #     info[item_id] = (data[1], data[2], data[3])
+    # if item_id in items:
+    #     items[item_id] += 1
+    # else:
+    #     items[item_id] = 1
+    # number = sum(items.values())
+    # print(items)
+    # print(info)
+    # return jsonify(number)
+    conn = db_connection()
+    cursor = conn.cursor()
+
+    sql = """INSERT INTO info (itemid, itemname, price, itemimg)
+            VALUES (?, ?, ?, ?)"""
+    cursor = conn.execute(sql, (data[0], data[1], data[2], data[3]))
+    conn.commit()
+    cursor.execute("SELECT * FROM info ORDER BY id DESC LIMIT 1")
+    result = cursor.fetchone()
+    print(result)
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    if infos is not None:
+        print(infos)
+    
+    return jsonify(len(infos))
 
 @app.route("/addincart", methods=['POST'])
 def add():
@@ -75,8 +116,17 @@ def remove():
 
 @app.route("/cartnum", methods=['POST'])
 def cart_num():
-    number = sum(items.values())
-    return jsonify(number)
+    conn = db_connection()
+    cursor = conn.cursor()
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    if infos is not None:
+        print(infos)
+    
+    return jsonify(len(infos))
 
 @app.route("/getids", methods=['POST'])
 def get_ids():
