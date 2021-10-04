@@ -112,28 +112,9 @@ def delete():
     if infos is not None:
         print(infos)
     else:
+        cleandb.clean()
         return 0
     return jsonify(len(infos))
-
-@app.route("/removeincart", methods=['POST'])
-def remove():
-    rf=request.form
-    data = []
-    for key in rf:
-        data.append(rf[key])
-    item_id = data[0]
-    cursor = conn.execute("DELETE FROM info WHERE itemid=?", (item_id,))
-    cursor = conn.execute("SELECT * FROM info")
-    infos = [
-        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
-        for row in cursor.fetchall()
-    ]
-    if infos is not None:
-        print(infos)
-    else:
-        return 0
-    return jsonify(len(infos))
-    
 
 @app.route("/cartnum", methods=['POST'])
 def cart_num():
