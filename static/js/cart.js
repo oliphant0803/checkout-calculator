@@ -42,14 +42,16 @@ $('#code').on('change', function() {
     let prices = get_prices();
     var discount = 1;
     var shipping = 0;
-    updateSummary(prices, discount, shipping);
+    let itemNum = get_item_counts();
+    updateSummary(prices, discount, shipping, itemNum);
 });
 
 $('#shipping').on('change', function() {
     let prices = get_prices();
     var discount = 1;
     var shipping = 0;
-    updateSummary(prices, discount, shipping);
+    let itemNum = get_item_counts();
+    updateSummary(prices, discount, shipping, itemNum);
 });
 
 function cartUpdate() {
@@ -64,25 +66,19 @@ function cartUpdate() {
     var shipping = 0;
 
     console.log(ids, prices, itemNum, imgs, itemnames, discount, shipping);
-    if(ids.length == prices.length && prices.length == itemNum.length && itemNum.length == imgs.length && imgs.length == itemnames.length){
-        for (var i = 0; i<prices.length; i++){
-            listenCartUpdate(ids[i], imgs[i], itemnames[i], itemNum[i], prices[i]);
-        }
-        get_num_item();
-    }else{
-        document.getElementById("numItem").innerHTML = 0;
-        document.getElementById("numItemCart").innerHTML = 0;
-        document.getElementById("numItemSummary").innerHTML = 0;
-        cleandb();
+    for (var i = 0; i<prices.length; i++){
+        listenCartUpdate(ids[i], imgs[i], itemnames[i], itemNum[i], parseFloat(prices[i]) * parseInt(itemNum[i]));
     }
-    updateSummary(prices, discount, shipping);
+
+    get_num_item();
+    updateSummary(prices, discount, shipping, itemNum);
 }
 
-function updateSummary(prices, discount, shipping){
+function updateSummary(prices, discount, shipping, itemNum){
     shipping = get_shipping(shipping);
     discount = calculate_discount(discount);
     console.log(discount);
-    calculatePrice(prices, discount, shipping);
+    calculatePrice(prices, discount, shipping, itemNum);
 }
 
 function calculate_discount(discount){
@@ -277,10 +273,10 @@ function get_num_item(){
     });
 });
 
-function calculatePrice(prices, discount, shipping){
+function calculatePrice(prices, discount, shipping, itemNum){
     var totalPrice = 0.00;
     for (var i=0; i<prices.length; i++){
-        totalPrice += parseFloat(prices[i]); 
+        totalPrice += parseFloat(prices[i]) * parseInt(itemNum[i]); 
     }
     if (totalPrice != 0){
         totalPrice = parseFloat(totalPrice) * parseFloat(discount);
@@ -327,13 +323,4 @@ function listenDeleteAll(id){
         data: "id=" + curr_id
     });
     location.reload();
-}
-
-function cleandb(){
-    $.ajax({
-        url: "/cleandb"
-      }).done(function() {
-       console.log('cleaned db');
-       location.reload();
-      });
 }

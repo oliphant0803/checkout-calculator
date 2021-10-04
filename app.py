@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 conn = None
 try: 
-    conn = sqlite3.connect('iteminfo.sqlite', check_same_thread=False)
+    conn = sqlite3.connect('iteminfo.db', check_same_thread=False)
     cursor = conn.cursor()
 
     clean_query = """ DROP TABLE IF EXISTS info;"""
@@ -26,13 +26,13 @@ try:
 except sqlite3.error as e:
         print(e)
 
-def db_connection():
-    conn = None
-    try: 
-        conn = sqlite3.connect('iteminfo.sqlite')
-    except sqlite3.error as e:
-        print(e)
-    return conn
+# def db_connection():
+#     conn = None
+#     try: 
+#         conn = sqlite3.connect('iteminfo.db')
+#     except sqlite3.error as e:
+#         print(e)
+#     return conn
 
 @app.route("/")
 def index():

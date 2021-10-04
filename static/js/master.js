@@ -86,3 +86,12 @@ function search_item() {
         }
     }
 }
+
+function cleandb(){
+    $.ajax({
+        url: "/cleandb"
+      }).done(function() {
+       console.log('cleaned db');
+       location.reload();
+      });
+}
