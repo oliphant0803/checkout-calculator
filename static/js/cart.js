@@ -64,11 +64,17 @@ function cartUpdate() {
     var shipping = 0;
 
     console.log(ids, prices, itemNum, imgs, itemnames, discount, shipping);
-    for (var i = 0; i<prices.length; i++){
-        listenCartUpdate(ids[i], imgs[i], itemnames[i], itemNum[i], prices[i]);
+    if(ids.length == prices.length && prices.length == itemNum.length && itemNum.length == imgs.length && imgs.length == itemnames.length){
+        for (var i = 0; i<prices.length; i++){
+            listenCartUpdate(ids[i], imgs[i], itemnames[i], itemNum[i], prices[i]);
+        }
+        get_num_item();
+    }else{
+        document.getElementById("numItem").innerHTML = 0;
+        document.getElementById("numItemCart").innerHTML = 0;
+        document.getElementById("numItemSummary").innerHTML = 0;
+        cleandb();
     }
-
-    get_num_item();
     updateSummary(prices, discount, shipping);
 }
 
@@ -321,4 +327,13 @@ function listenDeleteAll(id){
         data: "id=" + curr_id
     });
     location.reload();
+}
+
+function cleandb(){
+    $.ajax({
+        url: "/cleandb"
+      }).done(function() {
+       console.log('cleaned db');
+       location.reload();
+      });
 }
