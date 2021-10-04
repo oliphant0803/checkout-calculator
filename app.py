@@ -77,7 +77,7 @@ def add():
         data.append(rf[key])
     item_id = data[0]
     cursor = conn.execute("SELECT * FROM info WHERE itemid=?", (item_id,))
-    infos =  cursor.fetchone()
+    infos =  cursor.fetchlast()
     sql = """INSERT INTO info (itemid, itemname, price, itemimg)
             VALUES (?, ?, ?, ?)"""
     cursor = conn.execute(sql, (infos[1], infos[2], infos[3], infos[4]))
