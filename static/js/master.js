@@ -1,5 +1,3 @@
-var number;
-
 var name_info = [
     "LED bulb 806", "LED bulb 800", "LED bulb 600", "LED bulb 450", "LED bulb 380", "LED bulb 400",
     "LED spotlight", "LED abinet", "Remote Control", "Gateway", "Wireless Dimmer", "Control Outlet",
@@ -37,7 +35,6 @@ function item_display(id, name, img_src, price){
 }
 
 function get_cart_num(){
-    number = update_cart_num();
 } $(function(){
     $(".bg-cart").click(function() {
         console.log(this.id);
@@ -56,8 +53,7 @@ function get_cart_num(){
             dataType: 'json'
         }).done(function(data) {
             console.log(data);
-            number = data;
-            $('#numItem').html(number);
+            $('#numItem').html(data);
         });
     });
 });
