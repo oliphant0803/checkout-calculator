@@ -4,23 +4,26 @@ import sqlite3
 
 app = Flask(__name__)
 
-conn = sqlite3.connect("iteminfo.sqlite")
+conn = None
+try: 
+    conn = sqlite3.connect('iteminfo.sqlite', check_same_thread=False)
+    cursor = conn.cursor()
 
-cursor = conn.cursor()
+    clean_query = """ DROP TABLE IF EXISTS info;"""
 
-clean_query = """ DROP TABLE IF EXISTS info;"""
+    cursor.execute(clean_query)
 
-cursor.execute(clean_query)
+    sql_query = """ CREATE TABLE IF NOT EXISTS info (
+        id INTEGER PRIMARY KEY,
+        itemid text NOT NULL,
+        itemname text NOT NULL,
+        price text NOT NULL,
+        itemimg text NOT NULL
+    )"""
 
-sql_query = """ CREATE TABLE IF NOT EXISTS info (
-    id INTEGER PRIMARY KEY,
-    itemid text NOT NULL,
-    itemname text NOT NULL,
-    price text NOT NULL,
-    itemimg text NOT NULL
-)"""
-
-cursor.execute(sql_query)
+    cursor.execute(sql_query)
+except sqlite3.error as e:
+        print(e)
 
 def db_connection():
     conn = None
@@ -45,19 +48,6 @@ def sum_num():
     for key in rf:
         data.append(rf[key])
     print(data)
-    # item_id = data[0]
-    # if item_id not in info:
-    #     info[item_id] = (data[1], data[2], data[3])
-    # if item_id in items:
-    #     items[item_id] += 1
-    # else:
-    #     items[item_id] = 1
-    # number = sum(items.values())
-    # print(items)
-    # print(info)
-    # return jsonify(number)
-    conn = db_connection()
-    cursor = conn.cursor()
 
     sql = """INSERT INTO info (itemid, itemname, price, itemimg)
             VALUES (?, ?, ?, ?)"""
@@ -73,6 +63,8 @@ def sum_num():
     ]
     if infos is not None:
         print(infos)
+    else:
+        return 0
     
     return jsonify(len(infos))
 
@@ -83,9 +75,23 @@ def add():
     for key in rf:
         data.append(rf[key])
     item_id = data[0]
-    items[item_id] += 1
-    number = sum(items.values())
-    return jsonify(number)
+    cursor = conn.execute("SELECT * FROM info WHERE itemid=?", (item_id,))
+    infos =  cursor.fetchone()
+    sql = """INSERT INTO info (itemid, itemname, price, itemimg)
+            VALUES (?, ?, ?, ?)"""
+    cursor = conn.execute(sql, (infos[1], infos[2], infos[3], infos[4]))
+    conn.commit()
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    if infos is not None:
+        print(infos)
+    else:
+        return 0
+    
+    return jsonify(len(infos))
 
 @app.route("/deleteincart", methods=['POST'])
 def delete():
@@ -94,13 +100,19 @@ def delete():
     for key in rf:
         data.append(rf[key])
     item_id = data[0]
-    if items[item_id] == 1:
-        del items[item_id]
-        del info[item_id]
+    cursor = conn.execute("SELECT * FROM info WHERE itemid=?", (item_id,))
+    infos =  cursor.fetchone()
+    cursor = conn.execute("DELETE FROM info WHERE id=?", (infos[0],))
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    if infos is not None:
+        print(infos)
     else:
-        items[item_id] -= 1
-    number = sum(items.values())
-    return jsonify(number)
+        return 0
+    return jsonify(len(infos))
 
 @app.route("/removeincart", methods=['POST'])
 def remove():
@@ -109,15 +121,7 @@ def remove():
     for key in rf:
         data.append(rf[key])
     item_id = data[0]
-    del items[item_id]
-    del info[item_id]
-    number = sum(items.values())
-    return jsonify(number)
-
-@app.route("/cartnum", methods=['POST'])
-def cart_num():
-    conn = db_connection()
-    cursor = conn.cursor()
+    cursor = conn.execute("DELETE FROM info WHERE itemid=?", (item_id,))
     cursor = conn.execute("SELECT * FROM info")
     infos = [
         dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
@@ -125,43 +129,127 @@ def cart_num():
     ]
     if infos is not None:
         print(infos)
+    else:
+        return 0
+    return jsonify(len(infos))
+    
+
+@app.route("/cartnum", methods=['POST'])
+def cart_num():
+    
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    if infos is not None:
+        print(infos)
+    else:
+        return 0
     
     return jsonify(len(infos))
 
 @app.route("/getids", methods=['POST'])
 def get_ids():
-    ids = []
-    for item_id in items:
-        ids.append(item_id)
-    return jsonify(ids)
+    
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    # if infos is not None:
+    #     print(infos)
+    # else:
+    #     return []
+    counts = {}
+    for info in infos:
+        if info['itemid'] not in counts:
+            counts[info['itemid']] = info['itemid']
+    result = list(counts.values())
+    # print(result)
+    return jsonify(result)
 
 @app.route("/getimgs", methods=['POST'])
 def get_imgs():
-    imgs = []
-    for item_id in info:
-        imgs.append(info[item_id][2])
-    return jsonify(imgs)
+    
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    # if infos is not None:
+    #     print(infos)
+    # else:
+    #     return []
+    counts = {}
+    for info in infos:
+        if info['itemid'] not in counts:
+            counts[info['itemid']] = info['itemimg']
+    result = list(counts.values())
+    # print(result)
+    return jsonify(result)
 
 @app.route("/getnames", methods=['POST'])
 def get_names():
-    names = []
-    for item_id in info:
-        names.append(info[item_id][0])
-    return jsonify(names)
+    
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    # if infos is not None:
+    #     print(infos)
+    # else:
+    #     return []
+    counts = {}
+    for info in infos:
+        if info['itemid'] not in counts:
+            counts[info['itemid']] = info['name']
+    result = list(counts.values())
+    # print(result)
+    return jsonify(result)
 
 @app.route("/getprices", methods=['POST'])
 def get_prices():
-    prices = []
-    for item_id in info:
-        prices.append(float(info[item_id][1]) * float(items[item_id]))
-    return jsonify(prices)
+
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    # if infos is not None:
+    #     print(infos)
+    # else:
+    #     return []
+    counts = {}
+    for info in infos:
+        if info['itemid'] not in counts:
+            counts[info['itemid']] = info['price']
+    result = list(counts.values())
+    # print(result)
+    return jsonify(result)
 
 @app.route("/getcounts", methods=['POST'])
 def get_counts():
-    counts = []
-    for item_id in items:
-        counts.append(items[item_id])
-    return jsonify(counts)
+    
+    cursor = conn.execute("SELECT * FROM info")
+    infos = [
+        dict(id=row[0], itemid=row[1], name=row[2], price=row[3], itemimg=row[4])
+        for row in cursor.fetchall()
+    ]
+    # if infos is not None:
+    #     print(infos)
+    # else:
+    #     return []
+    counts = {}
+    for info in infos:
+        if info['itemid'] not in counts:
+            counts[info['itemid']] = 1
+        else:
+            counts[info['itemid']] += 1
+    result = list(counts.values())
+    # print(result)
+    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

@@ -274,12 +274,17 @@ function get_num_item(){
 function calculatePrice(prices, discount, shipping){
     var totalPrice = 0.00;
     for (var i=0; i<prices.length; i++){
-        totalPrice += prices[i]; 
+        totalPrice += parseFloat(prices[i]); 
     }
     if (totalPrice != 0){
-        totalPrice = parseFloat(totalPrice + shipping) * parseFloat(discount);
+        totalPrice = parseFloat(totalPrice) * parseFloat(discount);
     }
-    document.getElementById("beforeTaxPrice").innerHTML = Math.round(totalPrice * 100) / 100;;
+    document.getElementById("beforeTaxPrice").innerHTML = Math.round(totalPrice * 100) / 100;
+    if (totalPrice != 0){
+        totalPrice = parseFloat(totalPrice) + shipping;
+    }
+
+    document.getElementById("ws").innerHTML = Math.round(totalPrice * 100) / 100;
     document.getElementById("tax").innerHTML = Math.round(totalPrice * 0.13 * 100) / 100;
     document.getElementById("total").innerHTML = Math.round(totalPrice * 1.13 * 100) / 100;
 }

@@ -189,7 +189,7 @@ class TestFlaskApi(unittest.TestCase):
             self.assertEqual(result.data.decode('UTF-8'), '["2","1","13"]\n')
 
             result = client.post('/getprices', data={})
-            self.assertEqual(result.data.decode('UTF-8'), '[19.99,23.98,14.99]\n')
+            self.assertEqual(result.data.decode('UTF-8'), '["19.99","11.99","14.99"]\n')
 
             sent = {'item_id': 3, 'name': "LED bulb 600", 'price': "14.99", "img_src": "/static/assets/3.png"}
             result = client.post(
@@ -211,7 +211,7 @@ class TestFlaskApi(unittest.TestCase):
             self.assertEqual(result.data.decode('UTF-8'), '[1,2,1,1]\n')
 
             result = client.post('/getprices', data={})
-            self.assertEqual(result.data.decode('UTF-8'), '[19.99,23.98,14.99,14.99]\n')
+            self.assertEqual(result.data.decode('UTF-8'), '["19.99","11.99","14.99","14.99"]\n')
 
             result = client.post('/addincart', data={"id": 1})
             self.assertEqual(result.data.decode('UTF-8'), '6\n')
@@ -229,7 +229,7 @@ class TestFlaskApi(unittest.TestCase):
             self.assertEqual(result.data.decode('UTF-8'), '[1,1]\n')
 
             result = client.post('/getprices', data={})
-            self.assertEqual(result.data.decode('UTF-8'), '[14.99,14.99]\n')
+            self.assertEqual(result.data.decode('UTF-8'), '["14.99","14.99"]\n')
 
 if __name__ == "__main__":
     unittest.main()
