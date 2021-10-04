@@ -5,8 +5,6 @@ import json
 
 app = Flask(__name__)
 
-items = {}
-info = {}
 
 @app.route("/")
 def index():
@@ -114,4 +112,6 @@ def get_counts():
     return jsonify(counts)
 
 if __name__ == "__main__":
+    items = {}
+    info = {}
     app.run(host="0.0.0.0")
